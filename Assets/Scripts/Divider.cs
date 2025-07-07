@@ -27,13 +27,11 @@ public class Divider : MonoBehaviour
 
         if (hit.collider.TryGetComponent(out Cube cube))
         {
-            List<Cube> fragments = new List<Cube>();
-
             cube.Explode();
 
             if (Random.Range(minPercent, maxPercent + 1) <= cube.SplitChance)
             {
-                Divide(cube, fragments);
+                List<Cube> fragments = Divide(cube);
                 _exploder.Explode(fragments, cube);
             }
             else
@@ -43,14 +41,17 @@ public class Divider : MonoBehaviour
         }
     }
 
-    private void Divide(Cube cube, List<Cube> fragments)
+    private List<Cube> Divide(Cube cube)
     {
+        List<Cube> fragments = new List<Cube>();
         int randomCount = Random.Range(_minCountFragments, _maxCountFragments + 1);
 
         for (int i = 0; i < randomCount; i++)
         {
             fragments.Add(_spawner.CreateFragment(cube));
         }
+
+        return fragments;
     }
 }
 
